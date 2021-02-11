@@ -31,7 +31,6 @@ exports.getProjects = async (req, res) => {
     try {
         const projects = await Project.find({ author: req.user.id }).sort({ createdAt: -1 })
         res.json({ projects })
-        console.log(req.user)
     } catch (error) {
         console.log(error)
         res.status(500).send('Server error')

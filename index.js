@@ -17,6 +17,7 @@ const PORT = process.env.PORT || 3001;
 app.use('/api/users', require('./routes/users'))
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/projects', require('./routes/projects'))
+app.use('/api/tasks', require('./routes/tasks'))
 
 
 // Definir la pagina principal
