@@ -23,7 +23,7 @@ exports.authUser = async (req, res) => {
         const correctPass = await bcryptjs.compare(password, user.password)
         if (!correctPass)
             return res.status(400).json({ msg: 'Incorrect password' })
-        return res.send({ msg: 'Successful login' })
+        return res.send({ token: 'Successful login' })
     } catch (error) {
         console.log(error)
     }
