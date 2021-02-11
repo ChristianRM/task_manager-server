@@ -14,9 +14,25 @@ router.post('/',
     projectController.createProject
 )
 
+// Obtener todos los proyectos del usuario
 router.get('/',
     auth,
     projectController.getProjects
+)
+
+// Actualiza un proyecto
+router.put('/:id',
+    auth,
+    [
+        check('name', 'Name field is needed').not().isEmpty()
+    ],
+    projectController.updateProject
+)
+
+// Borra un proyecto
+router.delete('/:id',
+    auth,
+    projectController.deleteProject
 )
 
 module.exports = router

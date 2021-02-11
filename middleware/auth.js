@@ -6,7 +6,7 @@ module.exports = function (req, res, next) {
 
     // Revisar si no hay token
     if (!token)
-        return res.status(401).json({ msg: 'Unauthorized Error' })
+        return res.status(401).json({ msg: 'Unauthorized' })
 
     // Validar token
     try {
