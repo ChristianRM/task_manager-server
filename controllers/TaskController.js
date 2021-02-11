@@ -33,6 +33,7 @@ exports.createTask = async (req, res) => {
     }
 }
 
+// Traer tareas de un proyecto
 exports.getTasks = async (req, res) => {
     try {
         // Extraer proyecto y comprobar si existe
@@ -54,4 +55,42 @@ exports.getTasks = async (req, res) => {
         res.status(500).send('Server error')
     }
 
+}
+
+// Actualizar una tarea
+exports.updateTask = async (req, res) => {
+    try {
+        // Extraer proyecto y comprobar si existe
+        const { project, name, status } = req.body
+
+        // Verificar si la tarea existe
+        let task = await Task.findById(req.params.id)
+        if (!task)
+            return res.status(404).send('Task not found')
+
+        // Extraer proyecto
+        const projectExists = await Project.findById(project)
+        if (!projectExists)
+            return res.status(404).send('Project not found')
+
+        // Verificar el creador del proyecto
+        if (projectExists.author.toString() !== req.user.id)
+            return res.status(401).json({ msg: 'Unauthorized' })
+
+        // Crear un objeto con la nueva tarea
+        const newTask = {}
+        if (name)
+            newTask.name = name
+        if (status)
+            newTask.status = status
+
+        // Guardar la tarea
+        task = await Task.findByIdAndUpdate({ _id: req.params.id }, newTask, { new: true })
+
+        res.json({ task })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Server error')
+    }
 }
