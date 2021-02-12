@@ -28,4 +28,10 @@ router.put('/:id',
     taskController.updateTask
 )
 
+// Eliminar una tarea
+router.delete('/:id',
+    auth,
+    taskController.deleteTask
+)
+
 module.exports = router

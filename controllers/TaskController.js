@@ -94,3 +94,33 @@ exports.updateTask = async (req, res) => {
         res.status(500).send('Server error')
     }
 }
+
+// Eliminar una tarea
+exports.deleteTask = async (req, res) => {
+    try {
+        // Extraer proyecto y comprobar si existe
+        const { project } = req.body
+
+        // Verificar si la tarea existe
+        let task = await Task.findById(req.params.id)
+        if (!task)
+            return res.status(404).send('Task not found')
+
+        // Extraer proyecto
+        const projectExists = await Project.findById(project)
+        if (!projectExists)
+            return res.status(404).send('Project not found')
+
+        // Verificar el creador del proyecto
+        if (projectExists.author.toString() !== req.user.id)
+            return res.status(401).json({ msg: 'Unauthorized' })
+
+        // Eliminar tarea
+        await Task.findOneAndDelete({ _id: req.params.id })
+        res.json({ msg: 'Task deleted' })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Server error')
+    }
+}
