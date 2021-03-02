@@ -23,9 +23,25 @@ exports.authUser = async (req, res) => {
         const correctPass = await bcryptjs.compare(password, user.password)
         if (!correctPass)
             return res.status(400).json({ msg: 'Incorrect password' })
-        return res.send({ token: 'Successful login' })
+
+        // Si todo es correcto crear y firmar JWT
+        const payload = {
+            user: {
+                id: user.id
+            }
+        }
+
+        // Firmar el jwt
+        jwt.sign(payload, process.env.SECRET, {
+            expiresIn: 3600
+        }, (error, token) => {
+            if (error) {
+                throw error
+            }
+            res.json({ token })
+        })
     } catch (error) {
-        console.log(error)
+        res.status(500).json({ msg: 'There was a mistake' })
     }
 
 
@@ -37,7 +53,6 @@ exports.authenticatedUser = async (req, res) => {
         const user = await User.findById(req.user.id).select('-password')
         res.json({ user })
     } catch (error) {
-        console.log(error)
         res.status(500).json({ msg: 'There was a mistake' })
 
     }
