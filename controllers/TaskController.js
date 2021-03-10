@@ -24,7 +24,6 @@ exports.createTask = async (req, res) => {
         // Crear la tarea
         const task = new Task(req.body)
         await task.save()
-
         res.json({ task })
 
     } catch (error) {
@@ -37,7 +36,7 @@ exports.createTask = async (req, res) => {
 exports.getTasks = async (req, res) => {
     try {
         // Extraer proyecto y comprobar si existe
-        const { project } = req.body
+        const { project } = req.query
 
         const projectExists = await Project.findById(project)
         if (!projectExists)
@@ -48,7 +47,7 @@ exports.getTasks = async (req, res) => {
             return res.status(401).json({ msg: 'Unauthorized' })
 
         // Obtener las tareas por proyecto
-        const tasks = await Task.find({ project })
+        const tasks = await Task.find({ project }).sort({ createdAt: -1 })
         res.json({ tasks })
     } catch (error) {
         console.log(error)
