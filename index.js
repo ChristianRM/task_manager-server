@@ -15,7 +15,7 @@ app.use(cors())
 app.use(express.json({ extended: true }))
 
 // Puerto de la app
-const PORT = process.env.PORT || 3001;
+const port = process.env.port || 3001;
 
 // Importar rutas
 app.use('/api/users', require('./routes/users'))
@@ -30,6 +30,6 @@ app.get('/', (req, res) => {
 })
 
 // Iniciar la app
-app.listen(PORT, () => {
-    console.log(`app running at port ${PORT}`)
+app.listen(port, '0.0.0.0', () => {
+    console.log(`app running at port ${port}`)
 })
